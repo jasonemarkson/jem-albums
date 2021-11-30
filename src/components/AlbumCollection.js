@@ -1,6 +1,6 @@
 import React from 'react';
 import Album from './Album'
-import Brewery from './Brewery'
+import Brewery from './BreweryCollection'
 
 function AlbumCollection({albums}) {
 

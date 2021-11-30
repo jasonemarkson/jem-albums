@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react';
+import { Card } from 'semantic-ui-react'
 
-function Brewery(props) {
-
-    const [brewery, setBrewery] = useState([])
-
-    useEffect(() => {
-        fetch('https://api.openbrewerydb.org/breweries?by_city=brooklyn')
-        .then(response => response.json())
-        .then(breweries => {
-            breweries.map(brew => setBrewery(breweries))
-        })}, []
-    )
-
-    console.log("Breweries in Brooklyn", brewery)
-    
+const Brewery = ({breweries}) => {
+    console.log(breweries)
+    const uniqBreweries = breweries.filter(b => !b.brewery_type==="planning")
+    console.log("unique brews", uniqBreweries)
     return (
-        <div>
-            brewery {brewery.length}
-        </div>
+        <Card>
+            <div>
+                {/* <h5>{props.breweries.name}</h5> */}
+                {uniqBreweries.map(br => <h5>{br.name}</h5>)}
+            </div>
+        </Card>
     );
 }
 
