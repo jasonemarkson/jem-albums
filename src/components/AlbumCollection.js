@@ -7,7 +7,7 @@ function AlbumCollection({albums}) {
     return (
         <div>
             {/* <Brewery /> */}
-            {albums.map(album => <Album details={album} />)}
+            {albums.map(album => <Album key={album.id} details={album} />)}
         </div>
     );
 }

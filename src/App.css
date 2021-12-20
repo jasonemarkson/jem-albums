@@ -41,3 +41,7 @@ img {
   border: 30px solid black;
   box-shadow: 2px 2px;
 }
+
+#new-album-div {
+  border: 6px solid black;
+}

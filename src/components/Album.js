@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 
 function Album(props){
@@ -13,7 +13,6 @@ function Album(props){
         })
     }
 
-    // useEffect()
 
     function changeBttnColor() {
         color === 'blue' ? 
@@ -27,7 +26,7 @@ function Album(props){
 
     return (
         <div>
-            <h2 class="album-title-artist">{title} ({year}) - <em>{artist}</em> </h2>
+            <h2 className="album-title-artist">{title} ({year}) - <em>{artist}</em> </h2>
             <br></br>
             <img src={album_cover} alt="album cover" width="50%" />
             <p>
