@@ -12,6 +12,7 @@ function App() {
     fetch("http://localhost:3000/albums")
     .then(response => response.json())
     .then(albums => setAlbumColl(albums))
+    .catch(err => alert(err))
   }, [])
 
   return (
