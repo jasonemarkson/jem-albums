@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import Artists from './Artists'
+// import Album from './Album'
 
 function AlbumForm({albums}) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
@@ -11,7 +11,8 @@ function AlbumForm({albums}) {
     // console.log("newAlbum", newAlbum)
 
     const handleSubmit = (event) => {
-        debugger
+        // const albumCollectionDiv = document.getElementById('album-collection')
+
         event.preventDefault()
         // add fetch POST request
         fetch("http://localhost:3000/albums", {
@@ -24,19 +25,30 @@ function AlbumForm({albums}) {
         .then(resp => resp.json())
         .then(album => {
             // debugger
+            // NOTE: need to find a way to append new album to the album DIV
+            // albumCollectionDiv.innerHTML += <Album a={album} />
             console.log("Sucess:", album)
+            // event.target.reset()
+
         })
-        event.target.reset()
 
     }
     
     const handleChange = (event) => {
         const value = event.target.value
         console.log("NEW CHANGE", newAlbum)
-        setNewAlbum({
-            ...newAlbum, 
-            [event.target.id]: value
-        })
+        if (value === "-New Artist-") {
+            // NOTE: If the New Artist option is selected, delete the existing form with already created artists and render a new form for the user to add a new artist with a Name input
+            <form id="new-artist-form">
+                Artist Name: <input type="text" />
+                <input type="submit" />
+            </form>
+        } else {
+            setNewAlbum({
+                ...newAlbum, 
+                [event.target.id]: value
+            })
+        }
     }
 
     return (
@@ -50,6 +62,8 @@ function AlbumForm({albums}) {
                 Artist: 
                 <select id="artist_id" name="artist" onChange={handleChange} value={newAlbum.artist}>   
                  <option>-Select-</option>
+                 <option value="-New Artist-">-New Artist-</option>
+
                     {
                         uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
                     }
