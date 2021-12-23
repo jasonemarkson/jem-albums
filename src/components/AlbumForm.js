@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import Artists from './Artists'
+// import Artists from './Artists'
 
 function AlbumForm({albums}) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
 
+    
+    const artists = albums.map(a => a.artist)
+    const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
+    // console.log("Unique Artists from AlbumForm", uniqueArtists)
+    // console.log("newAlbum", newAlbum)
+
     const handleSubmit = (event) => {
-        debugger
         event.preventDefault()
         // add fetch POST request
         fetch("http://localhost:3000/albums", {
@@ -15,13 +20,15 @@ function AlbumForm({albums}) {
             }, 
             body: JSON.stringify(newAlbum)
         })
-
+        .then(resp => resp.json())
+        .then(albums => console.log(albums))
         event.target.reset()
+
     }
     
     const handleChange = (event) => {
         const value = event.target.value
-        // console.log("NEW CHANGE", newAlbum)
+        console.log("NEW CHANGE", newAlbum)
         setNewAlbum({
             ...newAlbum, 
             [event.target.id]: value
@@ -36,16 +43,13 @@ function AlbumForm({albums}) {
                 Year: <input id="year" type="text" onChange={handleChange} value={newAlbum.year} />
                 Album Cover URL: <input id="album_cover" type="text" onChange={handleChange} value={newAlbum.album_cover} />
                 <p></p>
-                {/* Create an Artist component where I can render all of the unique artists here as part of the New album form */}
                 Artist: 
-                <Artists props={albums} />
-                {/* <select id="artist_id" name="artist" onChange={handleChange} value={newAlbum.artist} >   
-                    <option>-Select-</option>
-                    <option>-New Artist-</option>
-                        {
-                            albums.map((a, key) => <option key={a.index} value={a.artist_id}>{a.artist.name}</option>)
-                        }
-                </select> */}
+                <select id="artist_id" name="artist" onChange={handleChange} value={newAlbum.artist}>   
+                 <option>-Select-</option>
+                    {
+                        uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
+                    }
+                </select>
 
                 <input type="submit" />
             </form>
