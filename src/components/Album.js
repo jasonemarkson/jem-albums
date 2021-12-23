@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 
 function Album(props){
-    const {title, year, album_cover, artist} = props.details
+    const {id, title, year, album_cover, artist} = props.details
     const [state, setState] = useState({count: 0, color: 'blue'})
     const count = state.count
     const color = state.color
@@ -24,15 +24,28 @@ function Album(props){
         })
     }
 
+    function deleteAlbum(event) {
+        const deletedAlbum = event.target.parentElement.parentElement
+        
+        fetch(`http://localhost:3000/albums/${deletedAlbum.id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        // .then(albums => console.log("Album Deleted", albums))
+            
+        deletedAlbum.remove()
+    }
+
 
     return (
-        <div>
+        <div id={id}>
             <h2 className="album-title-artist">{title} ({year}) - {artist.name} </h2>
             <br></br>
             <img src={album_cover} alt="album cover" width="50%" />
             <p>
             <button onClick={incrementLike}>Like 👍  ({count})</button><br></br>
             <button onClick={changeBttnColor}>Color Change { color === 'blue' ?"🟦": "🟩" } ({color.toUpperCase()})</button>
+            <button onClick={deleteAlbum}>Delete</button>
             </p>
         </div>
     );

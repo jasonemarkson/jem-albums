@@ -11,17 +11,21 @@ function AlbumForm({albums}) {
     // console.log("newAlbum", newAlbum)
 
     const handleSubmit = (event) => {
+        debugger
         event.preventDefault()
         // add fetch POST request
         fetch("http://localhost:3000/albums", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             }, 
             body: JSON.stringify(newAlbum)
         })
         .then(resp => resp.json())
-        .then(albums => console.log(albums))
+        .then(album => {
+            // debugger
+            console.log("Sucess:", album)
+        })
         event.target.reset()
 
     }
