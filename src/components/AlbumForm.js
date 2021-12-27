@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 function AlbumForm({albums}) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
+    const [form, setForm] = useState({ hidden: true })
 
     
     const artists = albums.map(a => a.artist)
@@ -23,7 +24,6 @@ function AlbumForm({albums}) {
         })
         .then(resp => resp.json())
         .then(album => {
-            // debugger
             // NOTE: need to find a way to append new album to the album DIV
             // albumCollectionDiv.innerHTML += <Album a={album} />
             // console.log("Sucess:", album)
@@ -33,9 +33,36 @@ function AlbumForm({albums}) {
 
     }
 
-    function renderCreatedArtists(){
+    
+    const handleClick = (event) => {
+        // debugger
+        const newArtistForm = document.createElement('div')
+        newArtistForm.id = 'new-artist-form'
+
         
-        uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
+        if (event.target.innerText === "Add New Artist") {
+            
+            newArtistForm.innerHTML = 
+            `
+            <h3>Create New Artist</h3>
+            <form id="new-artist-form" onSubmit={handleSubmit}>
+            Name: <input id="artist" type="text" />
+            <input type="submit" />
+            </form>
+            `
+            event.target.innerText = "Close"
+            
+            event.target.parentElement.appendChild(newArtistForm)
+            setForm( { hidden: false } )
+        } else {
+            // debugger
+            event.target.innerText = "Add New Artist"
+            debugger
+            newArtistForm.innerHTML = ""
+            setForm( { hidden: true } )
+            console.log(form)
+            // document.getElementById('new-artist-form').remove()
+        }
     }
     
     const handleChange = (event) => {
@@ -43,27 +70,27 @@ function AlbumForm({albums}) {
         
         
         
-        if (value === "-New Artist-") {
-            // NOTE: If the New Artist option is selected, delete the existing form with already created artists and render a new form for the user to add a new artist with a Name input
-            // create logic then move to a separate function
-            event.target.remove()
-            const artist_form = document.querySelector("#artist-form")
+        // if (value === "-New Artist-") {
+        //     // NOTE: If the New Artist option is selected, delete the existing form with already created artists and render a new form for the user to add a new artist with a Name input
+        //     // create logic then move to a separate function
+        //     event.target.remove()
+        //     const artist_form = document.querySelector("#artist-form")
 
-            artist_form.innerHTML = `
-            <h3>Create New Artist</h3>
-                <form id="new-artist-form" onSubmit={handleSubmit}>
-                    Name: <input id="artist" type="text" />
-                    <input type="submit" />
-                </form>
-                <button>Cancel</button>
-            `
+        //     artist_form.innerHTML = `
+        //     <h3>Create New Artist</h3>
+        //         <form id="new-artist-form" onSubmit={handleSubmit}>
+        //             Name: <input id="artist" type="text" />
+        //             <input type="submit" />
+        //         </form>
+        //         <button>Cancel</button>
+        //     `
 
-        } else {
+        // } else {
             setNewAlbum({
                 ...newAlbum, 
                 [event.target.id]: value
             })
-        }
+        // }
     }
 
     return (
@@ -77,18 +104,22 @@ function AlbumForm({albums}) {
                     Artist: 
                     <select id="artist_id" name="artist" onChange={handleChange} value={newAlbum.artist}> 
                     <option>-Select-</option>
-                    <option value="-New Artist-">-New Artist-</option>
+                    {/* <option value="-New Artist-">-New Artist-</option> */}
 
                         {
                             uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
                         }
                     </select>
-
                     <input type="submit" />
                 </p>
-                
+                    
+                    <em>Artist Not Listed? Click to Add a New Artist</em> <button onClick={handleClick}>Add New Artist</button>
+
 
             </form>
+            {/* <ArtistForm /> */}
+                
+
         </div>
     );
 }
