@@ -36,9 +36,8 @@ function AlbumForm({albums}) {
     
     const handleClick = (event) => {
         // debugger
-        const newArtistForm = document.createElement('div')
-        newArtistForm.id = 'new-artist-form'
-
+        const newArtistForm = document.createElement("div")
+        newArtistForm.id = "new-artist-form"
         
         if (event.target.innerText === "Add New Artist") {
             
@@ -54,14 +53,14 @@ function AlbumForm({albums}) {
             
             event.target.parentElement.appendChild(newArtistForm)
             setForm( { hidden: false } )
+            console.log(form)
         } else {
-            // debugger
+            let div = document.querySelector("#new-artist-form")
             event.target.innerText = "Add New Artist"
-            debugger
-            newArtistForm.innerHTML = ""
+            div.remove()
             setForm( { hidden: true } )
             console.log(form)
-            // document.getElementById('new-artist-form').remove()
+
         }
     }
     
@@ -104,11 +103,9 @@ function AlbumForm({albums}) {
                     Artist: 
                     <select id="artist_id" name="artist" onChange={handleChange} value={newAlbum.artist}> 
                     <option>-Select-</option>
-                    {/* <option value="-New Artist-">-New Artist-</option> */}
-
-                        {
-                            uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
-                        }
+                    {
+                        uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
+                    }
                     </select>
                     <input type="submit" />
                 </p>
