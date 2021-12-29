@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 function AlbumForm({albums}) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
+    const [newArtist, setNewArtist] = useState({ name: "" })
 
     
     const artists = albums.map(a => a.artist)
@@ -25,7 +26,26 @@ function AlbumForm({albums}) {
         .then(resp => resp.json())
         .then(album => {
             // NOTE: need to find a way to append new album to the album DIV
-            // albumCollectionDiv.innerHTML += <Album a={album} />
+            // console.log("Sucess:", album)
+            // event.target.reset()
+
+        })
+
+    }
+
+    const handleArtistSubmit = (event) => {
+        event.preventDefault()
+        // add fetch POST request
+        fetch("http://localhost:3000/artists", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify(newArtist)
+        })
+        .then(resp => resp.json())
+        .then(artist => {
+            // NOTE: need to find a way to append new album to the album DIV
             // console.log("Sucess:", album)
             // event.target.reset()
 
@@ -35,27 +55,29 @@ function AlbumForm({albums}) {
 
     
     const handleClick = (event) => {
-        // debugger
-        const newArtistForm = document.createElement("div")
-        newArtistForm.id = "new-artist-form"
+        const newArtistDiv = document.createElement("div")
+        newArtistDiv.id = "new-artist-div"
         
         if (event.target.innerText === "Add New Artist") {
-            
-            newArtistForm.innerHTML = 
+
+            // newArtistForm.addEventListener('submit', handleArtistSubmit)
+            newArtistDiv.innerHTML = 
             `
             <h3>Create New Artist</h3>
-            <form id="new-artist-form" onSubmit={handleSubmit}>
-            Name: <input id="artist" type="text" />
-            <input type="submit" />
+            <form id="new-artist-form" onsubmit="handleArtistSubmit" >
+                Name: <input id="name" type="text" value="${newArtist.name}" />
+                <input type="submit" />
             </form>
             `
             event.target.innerText = "Close"
+            newArtistDiv.addEventListener("change", handleChange)
+            newArtistDiv.addEventListener("submit", handleArtistSubmit)
             
-            event.target.parentElement.appendChild(newArtistForm)
+            event.target.parentElement.appendChild(newArtistDiv)
             setForm( { hidden: false } )
             console.log(form)
         } else {
-            let div = document.querySelector("#new-artist-form")
+            let div = document.querySelector("#new-artist-div")
             event.target.innerText = "Add New Artist"
             div.remove()
             setForm( { hidden: true } )
@@ -65,31 +87,22 @@ function AlbumForm({albums}) {
     }
     
     const handleChange = (event) => {
+        const id = event.target.id
         const value = event.target.value
-        
-        
-        
-        // if (value === "-New Artist-") {
-        //     // NOTE: If the New Artist option is selected, delete the existing form with already created artists and render a new form for the user to add a new artist with a Name input
-        //     // create logic then move to a separate function
-        //     event.target.remove()
-        //     const artist_form = document.querySelector("#artist-form")
 
-        //     artist_form.innerHTML = `
-        //     <h3>Create New Artist</h3>
-        //         <form id="new-artist-form" onSubmit={handleSubmit}>
-        //             Name: <input id="artist" type="text" />
-        //             <input type="submit" />
-        //         </form>
-        //         <button>Cancel</button>
-        //     `
-
-        // } else {
+        if (event.target.id === "name") {
+            setNewArtist({
+                [id]: value
+            })
+            // console.log("NEW CHANGE", newArtist)
+        } else {
+            
             setNewAlbum({
                 ...newAlbum, 
-                [event.target.id]: value
+                [id]: value
             })
-        // }
+            console.log("NEW CHANGE", newAlbum)
+        }
     }
 
     return (
@@ -114,8 +127,6 @@ function AlbumForm({albums}) {
 
 
             </form>
-            {/* <ArtistForm /> */}
-                
 
         </div>
     );
