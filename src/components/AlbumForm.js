@@ -9,8 +9,6 @@ function AlbumForm({albums}) {
     
     const artists = albums.map(a => a.artist)
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
-    // console.log("Unique Artists from AlbumForm", uniqueArtists)
-    // console.log("newAlbum", newAlbum)
 
     const handleSubmit = (event) => {
 
@@ -33,7 +31,7 @@ function AlbumForm({albums}) {
 
     }
 
-    const handleArtistSubmit = (event) => {
+    const handleArtistSubmit = (event) => { 
         event.preventDefault()
         // add fetch POST request
         fetch("http://localhost:3000/artists", {
@@ -45,7 +43,6 @@ function AlbumForm({albums}) {
         })
         .then(resp => resp.json())
         .then(artist => {
-            // NOTE: need to find a way to append new album to the album DIV
             // console.log("Sucess:", album)
             // event.target.reset()
 
@@ -55,23 +52,23 @@ function AlbumForm({albums}) {
 
     
     const handleClick = (event) => {
-        const newArtistDiv = document.createElement("div")
-        newArtistDiv.id = "new-artist-div"
+            const newArtistDiv = document.createElement("div")
+            newArtistDiv.id = "new-artist-div"
         
         if (event.target.innerText === "Add New Artist") {
 
-            // newArtistForm.addEventListener('submit', handleArtistSubmit)
             newArtistDiv.innerHTML = 
             `
             <h3>Create New Artist</h3>
             <form id="new-artist-form" onsubmit="handleArtistSubmit" >
-                Name: <input id="name" type="text" value="${newArtist.name}" />
+                Name: <input id="name" type="text" value='${newArtist.name}' />
                 <input type="submit" />
             </form>
             `
             event.target.innerText = "Close"
             newArtistDiv.addEventListener("change", handleChange)
             newArtistDiv.addEventListener("submit", handleArtistSubmit)
+
             
             event.target.parentElement.appendChild(newArtistDiv)
             setForm( { hidden: false } )
@@ -92,9 +89,10 @@ function AlbumForm({albums}) {
 
         if (event.target.id === "name") {
             setNewArtist({
+                ...newArtist,
                 [id]: value
             })
-            // console.log("NEW CHANGE", newArtist)
+            console.log("NEW CHANGE", newArtist)
         } else {
             
             setNewAlbum({
@@ -120,13 +118,12 @@ function AlbumForm({albums}) {
                         uniqueArtists.map((a, key) => <option id={a.id} key={a.id} value={a.id}>{a.name}</option>)
                     }
                     </select>
-                    <input type="submit" />
                 </p>
-                    
-                    <em>Artist Not Listed? Click to Add a New Artist</em> <button onClick={handleClick}>Add New Artist</button>
-
-
+                <input type="submit" />
             </form>
+                    
+            <em>Artist Not Listed? Click to Add a New Artist</em> 
+            <button onClick={handleClick}>Add New Artist</button>
 
         </div>
     );
