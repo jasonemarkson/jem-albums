@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import ArtistForm from 'react';
 
 function AlbumForm({albums}) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
@@ -10,7 +9,7 @@ function AlbumForm({albums}) {
     const artists = albums.map(a => a.artist)
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
-    const handleSubmit = (event) => {
+    const handleAlbumSubmit = (event) => {
 
         event.preventDefault()
         // add fetch POST request
@@ -31,7 +30,7 @@ function AlbumForm({albums}) {
 
     }
 
-    const handleArtistSubmit = (event) => { 
+    const handleArtistSubmit = (event) => {
         event.preventDefault()
         // add fetch POST request
         fetch("http://localhost:3000/artists", {
@@ -43,44 +42,29 @@ function AlbumForm({albums}) {
         })
         .then(resp => resp.json())
         .then(artist => {
-            // console.log("Sucess:", album)
-            // event.target.reset()
+            debugger
+            event.target.firstElementChild.value = ""
+            // alert(`${artist.name} has been added as a new artist`)
+            console.log("Sucess:", artist)
 
         })
+        .catch(err => console.log("Error:", err))
 
     }
 
-    
-    const handleClick = (event) => {
-            const newArtistDiv = document.createElement("div")
-            newArtistDiv.id = "new-artist-div"
-        
-        if (event.target.innerText === "Add New Artist") {
+    const handleArtistClick = (event) => {
+        const newArtistDiv = document.getElementById("new-artist-div")
 
-            newArtistDiv.innerHTML = 
-            `
-            <h3>Create New Artist</h3>
-            <form id="new-artist-form" onsubmit="handleArtistSubmit" >
-                Name: <input id="name" type="text" value='${newArtist.name}' />
-                <input type="submit" />
-            </form>
-            `
-            event.target.innerText = "Close"
-            newArtistDiv.addEventListener("change", handleChange)
-            newArtistDiv.addEventListener("submit", handleArtistSubmit)
-
-            
-            event.target.parentElement.appendChild(newArtistDiv)
+        if (newArtistDiv.style.display === "none") {
+            newArtistDiv.style.display = "block"
             setForm( { hidden: false } )
             console.log(form)
         } else {
-            let div = document.querySelector("#new-artist-div")
-            event.target.innerText = "Add New Artist"
-            div.remove()
+            newArtistDiv.style.display = "none"
             setForm( { hidden: true } )
             console.log(form)
-
         }
+            
     }
     
     const handleChange = (event) => {
@@ -89,7 +73,6 @@ function AlbumForm({albums}) {
 
         if (event.target.id === "name") {
             setNewArtist({
-                ...newArtist,
                 [id]: value
             })
             console.log("NEW CHANGE", newArtist)
@@ -106,7 +89,7 @@ function AlbumForm({albums}) {
     return (
         <div id="new-album-div">
             <h3>Add a New Album to the Collection</h3>
-            <form id="new-album-form" onSubmit={handleSubmit}>
+            <form id="new-album-form" onSubmit={handleAlbumSubmit}>
                 Title: <input id="title" type="text" onChange={handleChange} value={newAlbum.title} />
                 Year: <input id="year" type="text" onChange={handleChange} value={newAlbum.year} />
                 Album Cover URL: <input id="album_cover" type="text" onChange={handleChange} value={newAlbum.album_cover} />
@@ -123,7 +106,15 @@ function AlbumForm({albums}) {
             </form>
                     
             <em>Artist Not Listed? Click to Add a New Artist</em> 
-            <button onClick={handleClick}>Add New Artist</button>
+            <button onClick={handleArtistClick}>Add New Artist</button>
+
+            <div id="new-artist-div" style={{display: "none"}} >
+                <h3>Create New Artist</h3>
+                <form id="new-artist-form" onSubmit={handleArtistSubmit} >
+                    Name: <input id="name" type="text" value={newArtist.name} onChange={handleChange} />
+                    <input type="submit" />
+                </form>
+            </div>
 
         </div>
     );

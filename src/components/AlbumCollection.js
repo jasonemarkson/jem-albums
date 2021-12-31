@@ -14,7 +14,7 @@ function AlbumCollection({albums}) {
             setState({ ...state, coll: sortedAlbums })
         } else if (event.target.value === "Order Created") {
             const orderCreatedAlbums = albums.sort((a, b) => a.id < b.id ? -1 : 1)
-            setState({ ...state, coll: albumCollection })
+            setState({ ...state, coll: orderCreatedAlbums })
         } else if (event.target.value === "Oldest to Newest") {
             const oldestToNewestAlbums = albums.sort((a, b) => a.year < b.year ? -1 : 1)
             setState({ ...state, coll: oldestToNewestAlbums })
