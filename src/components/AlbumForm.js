@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-function AlbumForm({albums}) {
+function AlbumForm(props) {
+    const { artists } = props
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
     const [newArtist, setNewArtist] = useState({ name: "" })
 
-    
-    const artists = albums.map(a => a.artist)
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
     const handleAlbumSubmit = (event) => {
@@ -23,7 +22,7 @@ function AlbumForm({albums}) {
         .then(resp => resp.json())
         .then(album => {
             // NOTE: need to find a way to append new album to the album DIV
-            // console.log("Sucess:", album)
+            console.log("Sucess:", album)
             // event.target.reset()
 
         })
@@ -42,9 +41,7 @@ function AlbumForm({albums}) {
         })
         .then(resp => resp.json())
         .then(artist => {
-            debugger
             event.target.firstElementChild.value = ""
-            // alert(`${artist.name} has been added as a new artist`)
             console.log("Sucess:", artist)
 
         })
@@ -54,13 +51,16 @@ function AlbumForm({albums}) {
 
     const handleArtistClick = (event) => {
         const newArtistDiv = document.getElementById("new-artist-div")
+        const newArtistBttn = document.getElementById("new-artist-bttn")
 
         if (newArtistDiv.style.display === "none") {
             newArtistDiv.style.display = "block"
+            newArtistBttn.innerText = "Close"
             setForm( { hidden: false } )
             console.log(form)
         } else {
             newArtistDiv.style.display = "none"
+            newArtistBttn.innerText = "Add New Artist"
             setForm( { hidden: true } )
             console.log(form)
         }
@@ -106,7 +106,7 @@ function AlbumForm({albums}) {
             </form>
                     
             <em>Artist Not Listed? Click to Add a New Artist</em> 
-            <button onClick={handleArtistClick}>Add New Artist</button>
+            <button id="new-artist-bttn" onClick={handleArtistClick}>Add New Artist</button>
 
             <div id="new-artist-div" style={{display: "none"}} >
                 <h3>Create New Artist</h3>
