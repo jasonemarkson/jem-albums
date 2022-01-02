@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 function AlbumForm(props) {
-    const { artists } = props
+    const { albums, artists } = props
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
     const [newArtist, setNewArtist] = useState({ name: "" })
+    console.log("Props", props)
 
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
@@ -22,7 +23,12 @@ function AlbumForm(props) {
         .then(resp => resp.json())
         .then(album => {
             // NOTE: need to find a way to append new album to the album DIV
+            debugger
             console.log("Sucess:", album)
+            setNewAlbum({
+                ...albums,
+                album
+            })
             // event.target.reset()
 
         })
@@ -49,7 +55,7 @@ function AlbumForm(props) {
 
     }
 
-    const handleArtistClick = (event) => {
+    const handleArtistClick = () => {
         const newArtistDiv = document.getElementById("new-artist-div")
         const newArtistBttn = document.getElementById("new-artist-bttn")
 
@@ -104,9 +110,11 @@ function AlbumForm(props) {
                 </p>
                 <input type="submit" />
             </form>
-                    
-            <em>Artist Not Listed? Click to Add a New Artist</em> 
-            <button id="new-artist-bttn" onClick={handleArtistClick}>Add New Artist</button>
+
+            <p> 
+                <em>Artist Not Listed? Click to Add a New Artist</em> 
+                <button id="new-artist-bttn" onClick={handleArtistClick}>Add New Artist</button>
+            </p>       
 
             <div id="new-artist-div" style={{display: "none"}} >
                 <h3>Create New Artist</h3>

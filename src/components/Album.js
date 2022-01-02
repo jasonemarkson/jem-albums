@@ -26,7 +26,7 @@ function Album(props){
     // }
 
     function deleteAlbum(event) {
-        const deletedAlbum = event.target.parentElement.parentElement
+        const deletedAlbum = event.target.parentElement
         
         fetch(`http://localhost:3000/albums/${deletedAlbum.id}`, {
             method: 'DELETE'
@@ -43,10 +43,7 @@ function Album(props){
             <h2 className="album-title-artist">{title} ({year}) - {artist.name} </h2>
             <br></br>
             <img src={album_cover} alt="album cover" width="40%" />
-            <p>
-            {/* <button onClick={incrementLike}>Like 👍  ({count})</button><br></br> */}
-            {/* <button onClick={changeBttnColor}>Color Change { color === 'blue' ?"🟦": "🟩" } ({color.toUpperCase()})</button> */}
-            </p>
+            <br></br>
             <button onClick={deleteAlbum}>Delete</button>
         </div>
     );
