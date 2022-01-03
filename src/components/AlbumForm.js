@@ -5,7 +5,6 @@ function AlbumForm(props) {
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
     const [newArtist, setNewArtist] = useState({ name: "" })
-    console.log("Props", props)
 
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
@@ -23,7 +22,6 @@ function AlbumForm(props) {
         .then(resp => resp.json())
         .then(album => {
             // NOTE: need to find a way to append new album to the album DIV
-            debugger
             console.log("Sucess:", album)
             setNewAlbum({
                 ...albums,
@@ -93,7 +91,7 @@ function AlbumForm(props) {
     }
 
     return (
-        <div id="new-album-div">
+        <div id="new-album-div" >
             <h3>Add a New Album to the Collection</h3>
             <form id="new-album-form" onSubmit={handleAlbumSubmit}>
                 Title: <input id="title" type="text" onChange={handleChange} value={newAlbum.title} />

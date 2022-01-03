@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Album from './Album'
+import { RotateLoader } from 'react-spinners'
 // import Brewery from './BreweryCollection'
 
 function AlbumCollection({albums}) {
@@ -9,10 +10,9 @@ function AlbumCollection({albums}) {
     const sortAlbums = (event) => {
 
         if (event.target.value === "Albums A-Z") {
-            // event.target.value = "Order Created"
             const sortedAlbums = albums.sort((a, b) => a.title < b.title ? -1 : 1)
             setState({ ...state, coll: sortedAlbums })
-        } else if (event.target.value === "Order Created") {
+        } else if (event.target.value === "Order Created" || event.target.value === "~Select~") {
             const orderCreatedAlbums = albums.sort((a, b) => a.id < b.id ? -1 : 1)
             setState({ ...state, coll: orderCreatedAlbums })
         } else if (event.target.value === "Oldest to Newest") {
@@ -22,10 +22,25 @@ function AlbumCollection({albums}) {
             console.log("No Option")
         }
     }
+
+    const filterAlbums = (event) => {
+        const searchType = event.target.previousSibling.value
+        const searchInput = event.target.value
+
+        if (searchType === "Artist") {
+            console.log("Change", searchInput)
+            let filteredAlbums = albums.filter(a => a.artist.name.toLowerCase().includes(searchInput.toLowerCase()))
+            setState({
+                ...state, 
+                coll: filteredAlbums
+            })
+        }
+    }
     
     return (
         <div id="album-collection">
             {/* <Brewery /> */}
+            <h3>Showing {albums.length} albums</h3> 
             <p>Sort By:
             <select onChange={sortAlbums}>
                 <option>~Select~</option>
@@ -33,8 +48,16 @@ function AlbumCollection({albums}) {
                 <option>Oldest to Newest</option>
                 <option>Order Created</option>
             </select>
+            Search By: 
+            <select onChange={filterAlbums}>
+                <option>~Select~</option>
+                <option>Album Title</option>
+                <option>Artist</option>
+            </select>
+            <input type="text" />
             </p>
-            {albumCollection}
+            {/* {albumCollection} */}
+            {albums.length === 0 ? <RotateLoader/> : albumCollection }
         </div>
     );
 }
