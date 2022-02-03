@@ -44,6 +44,7 @@ function Album(props){
             <br></br>
             <img src={album_cover} alt="album cover" width="40%" />
             <br></br>
+            <input type="checkbox" onClick={handleCheck} />
             <button onClick={deleteAlbum}>Delete</button>
         </div>
     );

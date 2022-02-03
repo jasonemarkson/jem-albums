@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+// import Album from './Album'
 
 function AlbumForm(props) {
     const { albums, artists } = props
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
     const [newArtist, setNewArtist] = useState({ name: "" })
+    const [renderAlbums, setRenderAlbums] = useState({ alb: albums })
 
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
@@ -23,14 +25,12 @@ function AlbumForm(props) {
         .then(album => {
             // NOTE: need to find a way to append new album to the album DIV
             console.log("Sucess:", album)
-            setNewAlbum({
-                ...albums,
+            setRenderAlbums({
+                ...renderAlbums,
                 album
             })
             // event.target.reset()
-
-        })
-
+        }).catch(err => alert(err))
     }
 
     const handleArtistSubmit = (event) => {
