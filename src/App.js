@@ -26,12 +26,41 @@ function App() {
       .catch(err => alert(err))
     }, []
   )
+
+  const handleArtistSubmit = (event) => {
+    event.preventDefault()
+    const name = event.target.name
+    const newArtistObj = {
+      [name.id]: name.value
+    }
+    
+    fetch("http://localhost:3000/artists", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newArtistObj)
+    })
+    .then(resp => resp.json())
+    .then(artist => {
+      console.log("Success: ", artist)
+    })
+    .catch(err => console.log("Error:", err))
+
+    setArtistColl([
+      ...artistColl, {
+        [name.id]: name.value
+      }
+    ])
+
+    console.log("Updated Artist Collect in App", artistColl)
+  }
     
 
   return (
     <div className="App" >
       <h1>Welcome to JEM Albums: A Showcase of my Dad's Albums from Growing Up</h1>
-      <AlbumForm albums={albumColl} artists={artistColl} />
+      <AlbumForm albums={albumColl} artists={artistColl} handleArtistSubmit={handleArtistSubmit} />
       <AlbumCollection albums={albumColl} />
     </div>
   );

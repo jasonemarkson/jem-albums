@@ -29,28 +29,8 @@ function AlbumForm(props) {
                 ...renderAlbums,
                 album
             })
-            // event.target.reset()
+            event.target.reset()
         }).catch(err => alert(err))
-    }
-
-    const handleArtistSubmit = (event) => {
-        event.preventDefault()
-        // add fetch POST request
-        fetch("http://localhost:3000/artists", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify(newArtist)
-        })
-        .then(resp => resp.json())
-        .then(artist => {
-            event.target.firstElementChild.value = ""
-            console.log("Sucess:", artist)
-
-        })
-        .catch(err => console.log("Error:", err))
-
     }
 
     const handleArtistClick = () => {
@@ -116,7 +96,7 @@ function AlbumForm(props) {
 
             <div id="new-artist-div" style={{display: "none"}} >
                 <h3>Create New Artist</h3>
-                <form id="new-artist-form" onSubmit={handleArtistSubmit} >
+                <form id="new-artist-form" onSubmit={props.handleArtistSubmit} >
                     Name: <input id="name" type="text" value={newArtist.name} onChange={handleChange} />
                     <input type="submit" />
                 </form>
