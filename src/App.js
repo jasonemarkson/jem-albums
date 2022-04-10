@@ -1,7 +1,5 @@
 import './App.css';
 import React, { useState, useEffect } from 'react'
-// import { getAlbums } from './Data/FetchRequests/GetAlbums'
-// import { getArtists } from './Data/FetchRequests/GetArtists'
 import AlbumForm from './components/AlbumForm'
 import AlbumCollection from './components/AlbumCollection';
 
@@ -52,16 +50,40 @@ function App() {
         [name.id]: name.value
       }
     ])
+  }
+  
+  const addNewAlbum = (event) => {
+    // fetch request
+    // update the state
+    const newAlbumObj = event
+    debugger
+    
+    fetch("http://localhost:3000/albums", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newAlbumObj)
+    })
+    .then(resp => resp.json())
+    .then(album => {
+      console.log("New album added", album)
+      })
+    .catch(err => console.log("Error:", err))
 
-    console.log("Updated Artist Collect in App", artistColl)
+    setAlbumColl([
+      ...albumColl, 
+      newAlbumObj
+    ])
   }
     
 
   return (
     <div className="App" >
       <h1>Welcome to JEM Albums: A Showcase of my Dad's Albums from Growing Up</h1>
-      <AlbumForm albums={albumColl} artists={artistColl} handleArtistSubmit={handleArtistSubmit} />
+      <AlbumForm albums={albumColl} artists={artistColl} handleArtistSubmit={handleArtistSubmit} addNewAlbum={addNewAlbum} />
       <AlbumCollection albums={albumColl} />
+
     </div>
   );
 }

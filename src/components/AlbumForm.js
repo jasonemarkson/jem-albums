@@ -2,35 +2,41 @@ import React, { useState } from 'react';
 // import Album from './Album'
 
 function AlbumForm(props) {
-    const { albums, artists } = props
+    const { artists } = props
     const [newAlbum, setNewAlbum] = useState({ title: "", artist_id: "", year: "", album_cover: "" })
     const [form, setForm] = useState({ hidden: true })
     const [newArtist, setNewArtist] = useState({ name: "" })
-    const [renderAlbums, setRenderAlbums] = useState({ alb: albums })
+    // const [renderAlbums, setRenderAlbums] = useState({ alb: albums })
 
     const uniqueArtists = artists.filter((v,i,a)=>a.findIndex(t => (t.id === v.id))===i)
 
-    const handleAlbumSubmit = (event) => {
+    // refactor below by passing down a callback method as a prop from App to AlbumForm
+    // const handleAlbumSubmit = (event) => {
 
+    //     event.preventDefault()
+    //     // add fetch POST request
+    //     fetch("http://localhost:3000/albums", {
+    //         method: "POST",
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }, 
+    //         body: JSON.stringify(newAlbum)
+    //     })
+    //     .then(resp => resp.json())
+    //     .then(album => {
+    //         // NOTE: need to find a way to append new album to the album DIV
+    //         console.log("Sucess:", album)
+    //         setRenderAlbums({
+    //             ...renderAlbums,
+    //             album
+    //         })
+    //         event.target.reset()
+    //     }).catch(err => alert(err))
+    // }
+
+    const handleAlbumSubmit = (event) => {
         event.preventDefault()
-        // add fetch POST request
-        fetch("http://localhost:3000/albums", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            body: JSON.stringify(newAlbum)
-        })
-        .then(resp => resp.json())
-        .then(album => {
-            // NOTE: need to find a way to append new album to the album DIV
-            console.log("Sucess:", album)
-            setRenderAlbums({
-                ...renderAlbums,
-                album
-            })
-            event.target.reset()
-        }).catch(err => alert(err))
+        props.addNewAlbum(newAlbum)
     }
 
     const handleArtistClick = () => {

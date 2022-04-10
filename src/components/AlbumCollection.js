@@ -7,6 +7,7 @@ function AlbumCollection({albums}) {
     const [state, setState] = useState({ coll: [] })
     const albumCollection = albums.map(album => <Album key={album.id} details={album} />)
 
+
     const sortAlbums = (event) => {
 
         if (event.target.value === "Albums A-Z") {
