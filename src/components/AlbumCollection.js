@@ -25,12 +25,13 @@ function AlbumCollection({albums}) {
     }
 
     const filterAlbums = (event) => {
-        const searchType = event.target.previousSibling.value
+        // const searchType = event.target.previousSibling.value
         const searchInput = event.target.value
+        const searchBox = document.getElementById("search-by").value
 
-        if (searchType === "Artist") {
-            console.log("Change", searchInput)
-            let filteredAlbums = albums.filter(a => a.artist.name.toLowerCase().includes(searchInput.toLowerCase()))
+        if (searchInput === "Artist") {
+            debugger
+            let filteredAlbums = albums.filter(a => a.artist.name.toLowerCase().includes(searchBox.toLowerCase()))
             setState({
                 ...state, 
                 coll: filteredAlbums
@@ -55,7 +56,7 @@ function AlbumCollection({albums}) {
                 <option>Album Title</option>
                 <option>Artist</option>
             </select>
-            <input type="text" />
+            <input id="search-by" type="text" />
             </p>
             {/* {albumCollection} */}
             {albums.length === 0 ? <RotateLoader/> : albumCollection }
